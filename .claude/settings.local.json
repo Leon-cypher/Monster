@@ -1,0 +1,40 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:github.com)",
+      "Bash(npm install:*)",
+      "Bash(find C:/Users/USER/Desktop/MONSTER/monster-app/node_modules/svg-cards -name *.svg)",
+      "Bash(npm run:*)",
+      "Bash(ls:*)",
+      "Bash(del:*)",
+      "Bash(echo \"Exit: $?\")",
+      "Bash(node -e \"require\\(''./node_modules/vite/package.json''\\).version\")",
+      "Bash(node --input-type=module -e \"import v from ''./node_modules/vite/package.json'' assert {type:''json''}; console.log\\(v.version\\)\")",
+      "Bash(python -c \"import sys,json; print\\(json.load\\(sys.stdin\\)[''''version'''']\\)\")",
+      "Bash(./node_modules/.bin/vite build:*)",
+      "Bash(echo \"Exit code: $?\")",
+      "Bash(node:*)",
+      "Bash(2)",
+      "Bash(ROLLUP_NATIVE_PURE_JS=true ./node_modules/.bin/vite build)",
+      "Bash(npm --version)",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(''''version:'''', d[''''version'''']\\); print\\(''''engines:'''', d.get\\(''''engines'''', {}\\)\\)\")",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(''''rollup version:'''', d[''''version'''']\\)\")",
+      "Bash(find node_modules -name package.json -path */rollup/package.json)",
+      "Bash(find node_modules -name *.node)",
+      "Bash(ROLLUP_NATIVE=false npm run build)",
+      "Bash(NODE_OPTIONS=\"--max-old-space-size=4096\" npm run build)",
+      "Bash(firebase functions:log --only triggerManualCalculation)",
+      "Bash(firebase functions:log)",
+      "Bash(firebase functions:log --limit 20)",
+      "Bash(firebase functions:log --only scheduledCalculatePoints,triggerManualCalculation)",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(''''version:'''', d[''''version'''']\\)\")",
+      "Bash(firebase deploy:*)",
+      "Bash(gcloud run:*)",
+      "Bash(curl -s -X OPTIONS \"https://asia-east1-monster-afb3a.cloudfunctions.net/triggerManualCalculation\" -H \"Origin: https://monster-afb3a.web.app\" -H \"Access-Control-Request-Method: POST\" -H \"Access-Control-Request-Headers: content-type\" -i)",
+      "Bash(echo \"BUILD_EXIT=$?\")",
+      "Bash(curl -s -X OPTIONS \"https://monster-afb3a.web.app/api/triggerManualCalculation\" -H \"Origin: https://monster-afb3a.web.app\" -H \"Access-Control-Request-Method: POST\" -H \"Access-Control-Request-Headers: content-type\" -i)",
+      "Bash(where npm:*)",
+      "mcp__Claude_Preview__preview_start"
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Noto+Serif+TC:wght@700;900&display=swap');
+
+:root {
+  --ink:    #080f08;
+  --green:  #0d1f0f;
+  --green2: #112614;
+  --black:  #060606;
+  --gold:   #c9a840;
+  --gold-l: #e8c96a;
+  --bronze: #b87333;
+  --neon:   #00ffb3;
+  --red:    #e74c3c;
+  --white:  #f0f0f0;
+  --gray:   #6a6a6a;
+  --gray2:  #3a3a3a;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
+
+body {
+  font-family: 'Noto Sans TC', 'PingFang TC', sans-serif;
+  background: var(--black);
+  color: var(--white);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root { min-height: 100vh; max-width: 100%; overflow-x: hidden; }
+a { text-decoration: none; color: inherit; }
+button { font-family: inherit; }
+input, select { font-family: inherit; }
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--gray2); border-radius: 2px; }

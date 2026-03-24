@@ -1,0 +1,38 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "pos_records",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "processed", "order": "ASCENDING" },
+        { "fieldPath": "checkoutTime", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "pos_records",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "sourceFile", "order": "ASCENDING" },
+        { "fieldPath": "processed", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "pointTransactions",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "playerId", "order": "ASCENDING" },
+        { "fieldPath": "branchId", "order": "ASCENDING" },
+        { "fieldPath": "checkoutTime", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "pointTransactions",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "branchId", "order": "ASCENDING" },
+        { "fieldPath": "sourceRecordId", "order": "ASCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
