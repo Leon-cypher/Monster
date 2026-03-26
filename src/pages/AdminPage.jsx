@@ -716,12 +716,20 @@ export default function AdminPage() {
             : sRes.t === 'created' ? <Feedback type="ok">✅ 已建立玩家 <strong>{sRes.id}</strong>（{opBranch}）</Feedback>
             : <>
                 <Feedback type="info">
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-                    <span style={{ fontSize: '0.8em', color: C.gray }}>{sRes.id}　<span style={{ color: C.neon }}>{opBranch}</span></span>
-                    <span style={{ fontSize: '0.8em', color: C.gray }}>抽牌次數：<strong style={{ color: C.gold }}>{sRes.p.scratchCardChances}</strong></span>
+                  <div style={{ fontSize: '0.82em', color: C.gray, textAlign: 'center', marginBottom: 4 }}>
+                    {sRes.id}　<span style={{ color: C.neon }}>{opBranch}</span>
                   </div>
-                  <div style={{ fontSize: '3.2em', fontWeight: 900, color: C.gold, textAlign: 'center', lineHeight: 1 }}>{sRes.p.totalPoints}</div>
-                  <div style={{ textAlign: 'center', color: C.gray, fontSize: '0.76em', marginTop: 2 }}>目前點數</div>
+                  <div style={{ display: 'flex', justifyContent: 'center', gap: 24, marginTop: 8 }}>
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ fontSize: '3.2em', fontWeight: 900, color: C.neon, lineHeight: 1 }}>{sRes.p.scratchCardChances}</div>
+                      <div style={{ color: C.gray, fontSize: '0.76em', marginTop: 4 }}>抽獎次數</div>
+                    </div>
+                    <div style={{ width: 1, background: 'rgba(255,255,255,0.1)', margin: '4px 0' }} />
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ fontSize: '3.2em', fontWeight: 900, color: C.gold, lineHeight: 1 }}>{sRes.p.totalPoints}</div>
+                      <div style={{ color: C.gray, fontSize: '0.76em', marginTop: 4 }}>累積點數</div>
+                    </div>
+                  </div>
                 </Feedback>
 
                 {/* 操作區 */}
