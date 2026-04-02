@@ -546,3 +546,22 @@ exports.rollbackPOSBatch = onCall({
   }
 });
 
+
+
+// ======================================================================
+//  adminLogin — 後台帳密驗證（伺服器端，不暴露資料庫內容）
+// ======================================================================
+exports.adminLogin = onCall(async (request) => {
+  const { account, password } = request.data || {};
+  if (!account || !password) {
+    throw new HttpsError('invalid-argument', '請提供帳號與密碼');
+  }
+  const snap = await db.collection('adminaccount')
+    .where('account', '==', account)
+    .limit(1)
+    .get();
+  if (snap.empty || snap.docs[0].data().password !== password) {
+    throw new HttpsError('unauthenticated', '帳號或密碼錯誤');
+  }
+  return { success: true };
+});

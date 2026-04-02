@@ -27,6 +27,11 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
+    // adminaccount: fully blocked — verification done via Cloud Function
+    match /adminaccount/{docId} {
+      allow read, write: if false;
+    }
+
     // Deny everything else by default
     match /{document=**} {
       allow read, write: if false;
