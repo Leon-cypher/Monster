@@ -398,6 +398,7 @@ exports.redeemChance = onCall({ cors: true, region: "asia-east1", memory: "128Mi
     });
     return { success: true };
   } catch (e) {
+    if (e instanceof HttpsError) throw e;
     throw new HttpsError('internal', e.message);
   }
 });
@@ -547,6 +548,35 @@ exports.rollbackPOSBatch = onCall({
 });
 
 
+
+// ======================================================================
+//  submitDraw — 兌獎登記
+// ======================================================================
+exports.submitDraw = onCall({ cors: true, region: "asia-east1", memory: "128MiB", minInstances: 0, invoker: "public" }, async (request) => {
+  requireAdmin(request);
+  const { playerId, phase, card1, card2, result } = request.data;
+  if (!playerId || !phase || !result) throw new HttpsError('invalid-argument', '缺少參數');
+  if (!['大獎', '普獎', '無'].includes(result)) throw new HttpsError('invalid-argument', '無效的獎項結果');
+
+  const statField = result === '大獎' ? 'stats.grand' : result === '普獎' ? 'stats.regular' : 'stats.none';
+
+  // 找出 phase label 對應的 doc ID (1–4)
+  const PHASE_LABELS = ['第一階段', '第二階段', '第三階段', '第四階段'];
+  const phaseIndex = PHASE_LABELS.indexOf(phase);
+  if (phaseIndex === -1) throw new HttpsError('invalid-argument', '無效的階段');
+
+  try {
+    const batch = db.batch();
+    const newDrawRef = db.collection('draws').doc();
+    const phaseRef = db.collection('phases').doc(String(phaseIndex + 1));
+    batch.set(newDrawRef, { playerId, phase, card1: card1 || '', card2: card2 || '', result, timestamp: FieldValue.serverTimestamp() });
+    batch.update(phaseRef, { [statField]: FieldValue.increment(1) });
+    await batch.commit();
+    return { success: true };
+  } catch (e) {
+    throw new HttpsError('internal', e.message);
+  }
+});
 
 // ======================================================================
 //  adminLogin — 後台帳密驗證（伺服器端，不暴露資料庫內容）

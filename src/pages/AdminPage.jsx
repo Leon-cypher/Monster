@@ -455,7 +455,7 @@ export default function AdminPage() {
   async function updatePoints() {
     if (!sId.trim()) { setPRes({ t: 'err', msg: '請先查詢玩家' }); return }
     const amt = parseInt(pAmt)
-    if (!amt || amt <= 0) { setPRes({ t: 'err', msg: '請輸入有效點數' }); return }
+    if (!amt || amt <= 0) { setPRes({ t: 'err', msg: pAction === 'add' ? '請輸入有效點數' : '請輸入有效次數' }); return }
     setUpdateLoading(true)
     try {
       if (pAction === 'add') {
@@ -510,16 +510,10 @@ export default function AdminPage() {
     const c2 = handSlots[1].suit && handSlots[1].rank ? `${handSlots[1].suit}_${handSlots[1].rank}` : ''
     setSubmitLoading(true)
     try {
-      const statField = result === '大獎' ? 'stats.grand' : result === '普獎' ? 'stats.regular' : 'stats.none'
-      const newDrawRef = doc(collection(db, 'draws'))
-      const phaseRef   = doc(db, 'phases', String(phase + 1))
-      const batch = writeBatch(db)
-      batch.set(newDrawRef, { playerId: prId.trim(), phase: PHASES[phase], card1: c1, card2: c2, result, timestamp: serverTimestamp() })
-      batch.update(phaseRef, { [statField]: increment(1) })
-      await batch.commit()
+      await callFn('submitDraw')({ playerId: prId.trim(), phase: PHASES[phase], card1: c1, card2: c2, result, adminToken: ADMIN_TOKEN })
       setPrRes({ t: 'ok', id: prId.trim(), result, c1, c2 })
       setPrId(''); setPrMode(''); setHandSlots([{ suit: '', rank: '' }, { suit: '', rank: '' }]); setPrResult('')
-    } catch { setPrRes({ t: 'err', msg: '提交失敗，請稍後再試' }) }
+    } catch (e) { console.error('submitPrize failed:', e); setPrRes({ t: 'err', msg: '提交失敗，請稍後再試' }) }
     finally { setSubmitLoading(false) }
   }
 
@@ -748,7 +742,7 @@ export default function AdminPage() {
                 {pRes && (
                   pRes.t === 'err'
                     ? <Feedback type="err">{pRes.msg}</Feedback>
-                    : <Feedback type="ok">✅ {pRes.op === 'add' ? `加 ${pRes.amt} 點` : pRes.op === 'addChance' ? `加 ${pRes.amt} 次抽獎次數` : `扣 ${pRes.amt} 點（兌換）`}</Feedback>
+                    : <Feedback type="ok">✅ {pRes.op === 'add' ? `加 ${pRes.amt} 點` : pRes.op === 'addChance' ? `加 ${pRes.amt} 次抽獎次數` : `扣除 ${pRes.amt} 次抽獎次數`}</Feedback>
                 )}
               </>
           )}
