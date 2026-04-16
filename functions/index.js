@@ -215,32 +215,32 @@ async function activatePhase(phaseNumber) {
 
 // 第一階段：4/1 00:00 台北時間
 exports.activatePhase1 = onSchedule(
-  { schedule: "0 0 1 4 *", timeZone: "Asia/Taipei", region: "asia-east1", memory: "128MiB", minInstances: 0 },
+  { schedule: "0 0 1 4 *", timeZone: "Asia/Taipei", region: "asia-east1", memory: "256MiB", minInstances: 0 },
   async () => { await activatePhase(1); }
 );
 
 // 第二階段：4/17 11:00 台北時間
 exports.activatePhase2 = onSchedule(
-  { schedule: "0 11 17 4 *", timeZone: "Asia/Taipei", region: "asia-east1", memory: "128MiB", minInstances: 0 },
+  { schedule: "0 11 17 4 *", timeZone: "Asia/Taipei", region: "asia-east1", memory: "256MiB", minInstances: 0 },
   async () => { await activatePhase(2); }
 );
 
 // 第三階段：5/2 11:00 台北時間
 exports.activatePhase3 = onSchedule(
-  { schedule: "0 11 2 5 *", timeZone: "Asia/Taipei", region: "asia-east1", memory: "128MiB", minInstances: 0 },
+  { schedule: "0 11 2 5 *", timeZone: "Asia/Taipei", region: "asia-east1", memory: "256MiB", minInstances: 0 },
   async () => { await activatePhase(3); }
 );
 
 // 第四階段：5/17 11:00 台北時間
 exports.activatePhase4 = onSchedule(
-  { schedule: "0 11 17 5 *", timeZone: "Asia/Taipei", region: "asia-east1", memory: "128MiB", minInstances: 0 },
+  { schedule: "0 11 17 5 *", timeZone: "Asia/Taipei", region: "asia-east1", memory: "256MiB", minInstances: 0 },
   async () => { await activatePhase(4); }
 );
 
 // ======================================================================
 //  5. 手動觸發計分 API
 // ======================================================================
-exports.triggerManualCalculation = onCall({ cors: true, region: "asia-east1", memory: "128MiB", minInstances: 0, invoker: "public" }, async (request) => {
+exports.triggerManualCalculation = onCall({ cors: true, region: "asia-east1", memory: "256MiB", minInstances: 0, invoker: "public" }, async (request) => {
   requireAdmin(request);
   return await runCalculationLogic("MANUAL");
 });
@@ -279,8 +279,8 @@ async function runCalculationLogic(operator) {
     const val = parseItemValue(r.itemName);
     let pts = 0;
     if (val >= 11000) pts = 5;
-    else if (val >= 6600) pts = 3;
-    else if (val >= 3400) pts = 2;
+    else if (val >= 6500) pts = 3;   // 6500/6600/7000限時錦標賽：3點
+    else if (val >= 3400) pts = 2;   // 3400/3500限時錦標賽：2點
     else if (val >= 1200) pts = 1;
 
     if (pts > 0) {
@@ -343,7 +343,7 @@ async function runCalculationLogic(operator) {
 // ======================================================================
 //  3. 查詢玩家資訊 API
 // ======================================================================
-exports.getUserPoints = onCall({ cors: true, region: "asia-east1", memory: "128MiB", minInstances: 0, invoker: "public" }, async (request) => {
+exports.getUserPoints = onCall({ cors: true, region: "asia-east1", memory: "256MiB", minInstances: 0, invoker: "public" }, async (request) => {
   const { playerId, branchId } = request.data;
   if (!playerId || !branchId) throw new HttpsError('invalid-argument', '缺少參數');
 
@@ -378,7 +378,7 @@ exports.getUserPoints = onCall({ cors: true, region: "asia-east1", memory: "128M
 // ======================================================================
 //  4. 扣除抽獎次數 API
 // ======================================================================
-exports.redeemChance = onCall({ cors: true, region: "asia-east1", memory: "128MiB", minInstances: 0, invoker: "public" }, async (request) => {
+exports.redeemChance = onCall({ cors: true, region: "asia-east1", memory: "256MiB", minInstances: 0, invoker: "public" }, async (request) => {
   requireAdmin(request);
   const { playerId, branchId, deductTimes, reason, operator } = request.data;
   const num = Number(deductTimes);
@@ -406,7 +406,7 @@ exports.redeemChance = onCall({ cors: true, region: "asia-east1", memory: "128Mi
 // ======================================================================
 //  6. 手動調整 API
 // ======================================================================
-exports.manualAdjustPoints = onCall({ cors: true, region: "asia-east1", memory: "128MiB", minInstances: 0, invoker: "public" }, async (request) => {
+exports.manualAdjustPoints = onCall({ cors: true, region: "asia-east1", memory: "256MiB", minInstances: 0, invoker: "public" }, async (request) => {
   requireAdmin(request);
   const { playerId, branchId, pointsAdjustment, chancesAdjustment, reason, operator } = request.data;
   const pAdj = Number(pointsAdjustment) || 0;
@@ -552,7 +552,7 @@ exports.rollbackPOSBatch = onCall({
 // ======================================================================
 //  submitDraw — 兌獎登記
 // ======================================================================
-exports.submitDraw = onCall({ cors: true, region: "asia-east1", memory: "128MiB", minInstances: 0, invoker: "public" }, async (request) => {
+exports.submitDraw = onCall({ cors: true, region: "asia-east1", memory: "256MiB", minInstances: 0, invoker: "public" }, async (request) => {
   requireAdmin(request);
   const { playerId, phase, card1, card2, result } = request.data;
   if (!playerId || !phase || !result) throw new HttpsError('invalid-argument', '缺少參數');

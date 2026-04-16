@@ -353,8 +353,14 @@ export default function PlayerPage() {
     if (!container) return
     const inners = container.querySelectorAll('.card-inner')
     if (!inners.length) return
+    // 先全部設為背面
     setFlippedCards(Array(5).fill(true))
     gsap.set(inners, { rotateY: 180 })
+    // 依序自動翻開
+    inners.forEach((el, i) => {
+      gsap.to(el, { rotateY: 0, duration: 0.55, ease: 'power3.inOut', delay: 0.6 + i * 0.18 })
+    })
+    setFlippedCards(Array(5).fill(false))
   }, [communityCards])
 
   function toggleCard(i) {
@@ -392,9 +398,9 @@ export default function PlayerPage() {
 
       {/* ── HERO ── */}
       <section id="hero" style={{
-        minHeight: '80vh', display: 'flex', flexDirection: 'column',
+        minHeight: '100vh', display: 'flex', flexDirection: 'column',
         alignItems: 'center', justifyContent: 'center',
-        textAlign: 'center', padding: '120px 32px 60px',
+        textAlign: 'center', padding: '120px 32px 120px',
         position: 'relative',
       }}>
         <div style={{
@@ -432,7 +438,7 @@ export default function PlayerPage() {
           </div>
         </div>
 
-        <div ref={cueRef} style={{ position: 'absolute', bottom: 36, left: '50%', transform: 'translateX(-50%)', opacity: 0, textAlign: 'center' }}>
+        <div ref={cueRef} style={{ position: 'absolute', bottom: 48, left: '50%', transform: 'translateX(-50%)', opacity: 0, textAlign: 'center', pointerEvents: 'none' }}>
           <span style={{ fontSize: '0.7em', letterSpacing: 5, color: 'var(--gray)', display: 'block', marginBottom: 8 }}>SCROLL</span>
           <div style={{ width: 1, height: 64, background: 'linear-gradient(var(--gold),transparent)', margin: '0 auto', animation: 'sline 2.2s ease-in-out infinite' }} />
         </div>
