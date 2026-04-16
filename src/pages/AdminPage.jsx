@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { db, callFn } from '../lib/firebase'
 import {
@@ -376,11 +376,18 @@ export default function AdminPage() {
     )
   }, [])
 
+  const cardsPhaseInitialized = useRef(false)
   useEffect(() => {
     return onSnapshot(collection(db, 'phases'), snap => {
       const docs = {}
       snap.docs.forEach(d => { docs[d.id] = d.data() })
       setPhaseDocs(docs)
+      // 首次載入時自動切換至目前 active 的階段
+      if (!cardsPhaseInitialized.current) {
+        const activeIndex = snap.docs.findIndex(d => d.data().active === true)
+        if (activeIndex !== -1) setCardsPhase(activeIndex)
+        cardsPhaseInitialized.current = true
+      }
     })
   }, [])
 
