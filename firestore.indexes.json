@@ -1,6 +1,14 @@
 {
   "indexes": [
     {
+      "collectionGroup": "draws",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "phase", "order": "ASCENDING" },
+        { "fieldPath": "timestamp", "order": "DESCENDING" }
+      ]
+    },
+    {
       "collectionGroup": "pos_records",
       "queryScope": "COLLECTION",
       "fields": [

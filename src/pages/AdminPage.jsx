@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { db, callFn } from '../lib/firebase'
 import {
   doc, setDoc, collection, onSnapshot,
-  query, orderBy, limit, serverTimestamp, writeBatch, increment,
+  query, orderBy, limit, where, serverTimestamp, writeBatch, increment,
 } from 'firebase/firestore'
 import * as XLSX from 'xlsx'
 
@@ -363,7 +363,9 @@ export default function AdminPage() {
 
   /* ─── Firebase listeners ─── */
   useEffect(() => {
-    const q = query(collection(db, 'draws'), orderBy('timestamp', 'desc'), limit(200))
+    const q = fPhase !== 'all'
+      ? query(collection(db, 'draws'), where('phase', '==', fPhase), orderBy('timestamp', 'desc'))
+      : query(collection(db, 'draws'), orderBy('timestamp', 'desc'), limit(1000))
     return onSnapshot(q,
       snap => {
         setConnected(true)
@@ -374,7 +376,7 @@ export default function AdminPage() {
       },
       () => setConnected(false),
     )
-  }, [])
+  }, [fPhase])
 
   const cardsPhaseInitialized = useRef(false)
   useEffect(() => {
@@ -429,8 +431,8 @@ export default function AdminPage() {
   if (grand > 0) { const v = Math.max(Math.round(30000 / grand), 500); grandPerPerson = `$${v.toLocaleString()}`; grandPerNote = `$30,000 ÷ ${grand} 人${v === 500 ? '（保底 $500）' : ''}` }
 
   const filtered = records.filter(r =>
-    (fPhase === 'all' || r.phase === fPhase) && (fResult === 'all' || r.result === fResult)
-  ).slice(0, 100)
+    fResult === 'all' || r.result === fResult
+  )
 
   /* ─── Actions ─── */
   async function searchPlayer() {
@@ -578,9 +580,7 @@ export default function AdminPage() {
   }
 
   function exportWinners() {
-    const winners = records.filter(r =>
-      (fPhase === 'all' || r.phase === fPhase) && (r.result === '大獎' || r.result === '普獎')
-    )
+    const winners = records.filter(r => r.result === '大獎' || r.result === '普獎')
     if (winners.length === 0) { alert('目前篩選條件下沒有中獎紀錄'); return }
 
     // 計算各階段普獎/大獎人數（從所有 records）
