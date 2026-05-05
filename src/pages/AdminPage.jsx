@@ -387,7 +387,10 @@ export default function AdminPage() {
       // 首次載入時自動切換至目前 active 的階段
       if (!cardsPhaseInitialized.current) {
         const activeIndex = snap.docs.findIndex(d => d.data().active === true)
-        if (activeIndex !== -1) setCardsPhase(activeIndex)
+        if (activeIndex !== -1) {
+          setCardsPhase(activeIndex)
+          setPhase(activeIndex)
+        }
         cardsPhaseInitialized.current = true
       }
     })
@@ -656,7 +659,10 @@ export default function AdminPage() {
           <select value={branch} onChange={e => setBranch(e.target.value)} style={topSelect}>
             {BRANCHES.map(b => <option key={b} value={b} style={{ background: C.input }}>{b}</option>)}
           </select>
-          <select value={phase} onChange={e => setPhase(+e.target.value)} style={topSelect}>
+          <select value={phase} onChange={e => {
+            const next = +e.target.value
+            setPwConfirm({ message: `切換兌獎登記階段至「${PHASES[next]}」？`, onConfirm: () => { setPwConfirm(null); setPhase(next) } })
+          }} style={topSelect}>
             {PHASES.map((p, i) => <option key={i} value={i} style={{ background: C.input }}>{p}</option>)}
           </select>
           <div style={{
